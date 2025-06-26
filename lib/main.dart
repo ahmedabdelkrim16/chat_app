@@ -5,15 +5,21 @@ import 'package:chat_app/pages/resgister_page.dart';
 import 'package:chat_app/pages/viewmodel/Blocs/auth_bloc.dart';
 import 'package:chat_app/pages/viewmodel/auth/auth_cubit.dart';
 import 'package:chat_app/pages/viewmodel/chat/chat_cubit.dart';
+import 'package:chat_app/simple_bloc_observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bloc/bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // BlocOverrides.runZoned(() {
+  //   runApp(const ChatApp());
+  // }, blocObserver: SimpleBlocObserver());
+  Bloc.observer = SimpleBlocObserver(); // ✅
   runApp(const ChatApp());
 }
 

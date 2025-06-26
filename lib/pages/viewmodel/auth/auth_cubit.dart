@@ -51,5 +51,9 @@ class AuthCubit extends Cubit<AuthState> {
       );
     }
   }
-
+@override
+  void onChange(Change<AuthState> change) {
+    
+    print(change);
+  }
 }

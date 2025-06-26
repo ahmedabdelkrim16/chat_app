@@ -9,20 +9,29 @@ import 'package:chat_app/pages/viewmodel/Blocs/auth_bloc.dart';
 import 'package:chat_app/pages/viewmodel/chat/chat_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   static const String id = 'LoginPage';
-  String? email;
-  String? password;
-  @override
-  GlobalKey<FormState> formKey = GlobalKey();
 
   LoginPage({super.key});
 
   @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  String? email;
+
+  String? password;
+
+  @override
+  GlobalKey<FormState> formKey = GlobalKey();
+
+  @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is LoginLoading) {
           showDialog(
             context: context,
@@ -57,9 +66,30 @@ class LoginPage extends StatelessWidget {
           );
         }
         if (state is LoginSuccess) {
-          Navigator.of(context, rootNavigator: true).pop();
-          context.read<ChatCubit>().getMessages();
-          Navigator.pushNamed(context, ChatPage.id, arguments: email);
+          final rootContext = context; // خزن context الأصلي
+
+          showDialog(
+            context: rootContext,
+            barrierDismissible: false,
+            builder: (_) => Center(
+              child: SizedBox(
+                width: 200,
+                height: 200,
+                child: Lottie.asset(
+                  'assets/Animation/Animation - 1750943983460.json',
+                ),
+              ),
+            ),
+          );
+
+          await Future.delayed(Duration(seconds: 2));
+
+          if (!mounted) return;
+
+          Navigator.of(rootContext, rootNavigator: true).pop(); // قفل الديالوج
+
+          rootContext.read<ChatCubit>().getMessages();
+          Navigator.pushNamed(rootContext, ChatPage.id, arguments: email);
         }
       },
       child: Scaffold(
@@ -117,8 +147,8 @@ class LoginPage extends StatelessWidget {
                   onTap: () {
                     if (formKey.currentState!.validate()) {
                       context
-                          .read<AuthBloc>().add(LoginEvent(email: email!, password: password!));
-                          
+                          .read<AuthBloc>()
+                          .add(LoginEvent(email: email!, password: password!));
                     }
                   },
                   text: 'LOGIN',

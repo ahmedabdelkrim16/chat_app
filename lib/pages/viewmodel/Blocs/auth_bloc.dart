@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
@@ -49,5 +51,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(LoginFailure('حدث خطأ غير متوقع'));
       }
     });
+  }
+  @override
+  void onTransition(Transition<AuthEvent, AuthState> transition) {
+    super.onTransition(transition);
+    log(transition.toString());
   }
 }
