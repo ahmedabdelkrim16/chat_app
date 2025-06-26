@@ -5,8 +5,8 @@ import 'package:chat_app/Widgets/custom_text_filed.dart';
 import 'package:chat_app/constant.dart';
 import 'package:chat_app/pages/chat_page.dart';
 import 'package:chat_app/pages/resgister_page.dart';
+import 'package:chat_app/pages/viewmodel/auth/auth_cubit.dart';
 import 'package:chat_app/pages/viewmodel/chat/chat_cubit.dart';
-import 'package:chat_app/pages/viewmodel/login/login_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,7 +21,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginCubit, LoginState>(
+    return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is LoginLoading) {
           showDialog(
@@ -117,7 +117,7 @@ class LoginPage extends StatelessWidget {
                   onTap: () {
                     if (formKey.currentState!.validate()) {
                       context
-                          .read<LoginCubit>()
+                          .read<AuthCubit>()
                           .loginUser(email: email!, password: password!);
                     }
                   },
