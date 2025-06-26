@@ -3,7 +3,7 @@ import 'package:chat_app/Widgets/custom_Button.dart';
 import 'package:chat_app/Widgets/custom_text_filed.dart';
 import 'package:chat_app/constant.dart';
 import 'package:chat_app/pages/chat_page.dart';
-import 'package:chat_app/pages/viewmodel/auth/auth_cubit.dart';
+import 'package:chat_app/pages/viewmodel/Blocs/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,7 +19,7 @@ class ResgisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthCubit, AuthState>(
+    return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is ResgisterLoading) {
           showDialog(
@@ -114,9 +114,8 @@ class ResgisterPage extends StatelessWidget {
                 CustomButton(
                   onTap: () async {
                     if (formKey.currentState!.validate()) {
-                      context
-                          .read<AuthCubit>()
-                          .resgisterUser(email: email!, password: password!);
+                      context.read<AuthBloc>().add(
+                          ResgisterEvent(email: email!, password: password!));
                     }
                   },
                   text: 'REGISTER',
